@@ -37,7 +37,8 @@
 
 
     function EventEmitter() {
-        this.id = this.id ? this.id : uniqueID('event_emitter_');
+        this.type_prefix = this.type_prefix ? this.type_prefix : 'event_emitter';
+        this.id = this.id ? this.id : uniqueID(this.type_prefix + '_');
 
         /**
          * Events, object with key is event name, object is an object with:
@@ -122,11 +123,11 @@
     }
 
     /**
-     *
-     * @param {Array} [events]
+     * Reset events
+     * @param {Array|string} [events]
      * @return {EventEmitter}
      */
-    EventEmitter.prototype.reset = function (events) {
+    EventEmitter.prototype.resetEvents = function (events) {
         if (!arguments.length) {
             events = _.keys(this._events);
         } else {
@@ -160,6 +161,13 @@
 
         return this;
     };
+    
+    /**
+     * Reset events
+     * @param {Array|string} [events]
+     * @return {EventEmitter}
+     */
+    EventEmitter.prototype.reset = EventEmitter.prototype.resetEvents;
 
     /**
      *
