@@ -120,6 +120,12 @@
          * @type {{}|boolean}
          */
         this._private_events = {};
+
+        /**
+         * Default "this" argument for event listeners
+         * @type {EventEmitter|*}
+         */
+        this.bound = this;
     }
 
     /**
@@ -161,7 +167,7 @@
 
         return this;
     };
-    
+
     /**
      * Reset events
      * @param {Array|string} [events]
@@ -660,9 +666,9 @@
         _.each(listeners, function (listener_detail) {
             if (listener_detail.times === true || listener_detail.times > 0) {
                 if (listener_detail.async) {
-                    async_callback(listener_detail.listener, data, listener_detail.context || instance, listener_detail.delay);
+                    async_callback(listener_detail.listener, data, listener_detail.context || instance.bound, listener_detail.delay);
                 } else {
-                    do_callback(listener_detail.listener, data, listener_detail.context || instance);
+                    do_callback(listener_detail.listener, data, listener_detail.context || instance.bound);
                 }
 
                 if (listener_detail.times === true) {
